@@ -153,8 +153,17 @@ public func configure(_ app: Application) throws {
 To start your server type, `swift run` in the terminal of the project root directory.
 
 ## Writing Cloud Code
+### Sharing Server-Client Code
+[Apple's WWDC User Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/) recommends creating Swift packages (15:26 mark) to house your models and share them between server and clients apps to reduce code duplication. To maximize Parse-Swift, it is recommended to not only add your models to your shared package, but to also add all of your queries (server and client). The reasons for this are: 
+
+1. Parse-Swift queries on the client are cached by default; allowing Parse-Swift based apps to leverage cache to build zippier experiences
+2. When leveraging your shared queries in ParseServerSwift; they will never access local server cache as they always request the latest data from the Node.js Parse Server
+3. Calling Cloud-Code functions from clients do not ever access local cache as these are `POST` calls to the Node.js Parse Server
+
+Learn more about sharing models by reading the [SwiftLee Blog](https://www.avanderlee.com/swift/share-swift-code-swift-on-server-vapor/).
+
 ### Creating `ParseObject`'s
-It is recommended to add all of your `ParseObject`'s in a folder called `Models` similar to [ParseServerSwift/Sources/ParseServerSwift/Models](https://github.com/netreconlab/ParseServerSwift/blob/main/Sources/ParseServerSwift/Models). Note that in the [Apple's WWDC User Xcode for server-side development](https://developer.apple.com/videos/play/wwdc2022/110360/), it is recommended to create packages (15:26 mark) to house your models to share between server and clients apps and reduce code repition.
+If you have not created a [shared package for your models](#sharing-server-client-code), it is recommended to add all of your `ParseObject`'s in a folder called `Models` similar to [ParseServerSwift/Sources/ParseServerSwift/Models](https://github.com/netreconlab/ParseServerSwift/blob/main/Sources/ParseServerSwift/Models).
 
 #### The `ParseUser` Model
 Be mindful that the `ParseUser` in `ParseServerSwift` should conform to [ParseCloudUser](https://swiftpackageindex.com/netreconlab/parse-swift/4.16.2/documentation/parseswift/parseclouduser). This is because the `ParseCloudUser` contains some additional properties on the server-side. On the client, you should always use `ParseUser` instead of `ParseCloudUser`. In addition, make sure to add all of the additional properties you have in your `_User` class to the `User` model. An example `User` model is below:
@@ -219,6 +228,14 @@ struct GameScore: ParseObject {
 ### Creating New Cloud Code Routes 
 Adding routes for `ParseHooks` are as simple as adding [routes in Vapor](https://docs.vapor.codes/basics/routing/). `ParseServerSwift` provides some additional methods to routes to easily create and register [Hook Functions](https://parseplatform.org/Parse-Swift/release/documentation/parseswift/parsehookfunctionable) and [Hook Triggers](https://parseplatform.org/Parse-Swift/release/documentation/parseswift/parsehooktriggerable/). All routes should be added to the `routes.swift` file in your project. Example `ParseServerSwift` routes can be found in [ParseServerSwift/Sources/ParseServerSwift/routes.swift](https://github.com/netreconlab/ParseServerSwift/blob/main/Sources/ParseServerSwift/routes.swift).
 
+#### Router Groups and Collections
+Since `ParseServerSwift` is a Vapor server, it can be configured a number of different ways to suite your needs. Be sure to read through the [vapor documentation](https://docs.vapor.codes). Some important features you may want to take advantage of are highlighed below:
+
+- Route [groups](https://docs.vapor.codes/basics/routing/#route-groups) allows you to create a set of routes with a path prefix or specific middleware
+- Route [collections](https://legacy.docs.vapor.codes/2.0/routing/collection/) allow multiple routes and route groups to be organized in different files or modules
+
+To learn more about creating groups and collections, checkout this [blog](https://alexandrecools.medium.com/vapor-routes-groups-and-collections-5ff920720317).
+
 **Be sure to add `import ParseSwift` and `import ParseServerSwift` to the top of routes.swift**
 
 ### Sending Errors From Cloud Code Routes
@@ -249,7 +266,7 @@ Cloud Code Functions can also take parameters. It's recommended to place all par
 [ParseServerSwift/Sources/ParseServerSwift/Models/Parameters](https://github.com/netreconlab/ParseServerSwift/blob/main/Sources/ParseServerSwift/Models/Parameters)
 
 ```swift
-// A Parse Hook Function route.
+// A simple Parse Hook Function route that returns "Hello World".
 app.post("hello",
          name: "hello") { req async throws -> ParseHookResponse<String> in
     // Note that `ParseHookResponse<String>` means a "successfull"
@@ -260,7 +277,7 @@ app.post("hello",
     var parseRequest = try req.content
         .decode(ParseHookFunctionRequest<User, FooParameters>.self)
     
-    // If a User called the request, fetch the complete user.
+    // If a User made the request, fetch the complete user.
     if parseRequest.user != nil {
         parseRequest = try await parseRequest.hydrateUser(request: req)
     }
@@ -278,8 +295,8 @@ app.post("hello",
 ```swift
 // A Parse Hook Trigger route.
 app.post("score", "save", "before",
-         className: GameScore.className,
-         triggerName: .beforeSave) { req async throws -> ParseHookResponse<GameScore> in
+         object: GameScore.self,
+         trigger: .beforeSave) { req async throws -> ParseHookResponse<GameScore> in
     // Note that `ParseHookResponse<GameScore>` means a "successfull"
     // response will return a "GameScore" type.
     if let error: ParseHookResponse<GameScore> = checkHeaders(req) {
@@ -288,7 +305,7 @@ app.post("score", "save", "before",
     var parseRequest = try req.content
         .decode(ParseHookTriggerObjectRequest<User, GameScore>.self)
 
-    // If a User called the request, fetch the complete user.
+    // If a User made the request, fetch the complete user.
     if parseRequest.user != nil {
         parseRequest = try await parseRequest.hydrateUser(request: req)
     }
@@ -306,8 +323,8 @@ app.post("score", "save", "before",
 
 // Another Parse Hook Trigger route.
 app.post("score", "find", "before",
-         className: GameScore.className,
-         triggerName: .beforeFind) { req async throws -> ParseHookResponse<[GameScore]> in
+         object: GameScore.self,
+         trigger: .beforeFind) { req async throws -> ParseHookResponse<[GameScore]> in
     // Note that `ParseHookResponse<[GameScore]>` means a "successfull"
     // response will return a "[GameScore]" type.
     if let error: ParseHookResponse<[GameScore]> = checkHeaders(req) {
@@ -333,8 +350,8 @@ app.post("score", "find", "before",
 
 // Another Parse Hook Trigger route.
 app.post("user", "login", "after",
-         className: User.className,
-         triggerName: .afterLogin) { req async throws -> ParseHookResponse<Bool> in
+         object: User.self,
+         trigger: .afterLogin) { req async throws -> ParseHookResponse<Bool> in
     // Note that `ParseHookResponse<Bool>` means a "successfull"
     // response will return a "Bool" type. Bool is the standard response with
     // a "true" response meaning everything is okay or continue.
@@ -350,7 +367,7 @@ app.post("user", "login", "after",
 
 // A Parse Hook Trigger route for `ParseFile`.
 app.on("file", "save", "before",
-       triggerName: .beforeSave) { req async throws -> ParseHookResponse<Bool> in
+       trigger: .beforeSave) { req async throws -> ParseHookResponse<Bool> in
     // Note that `ParseHookResponse<Bool>` means a "successfull"
     // response will return a "Bool" type. Bool is the standard response with
     // a "true" response meaning everything is okay or continue. Sending "false"
@@ -367,7 +384,7 @@ app.on("file", "save", "before",
 
 // Another Parse Hook Trigger route for `ParseFile`.
 app.post("file", "delete", "before",
-         triggerName: .beforeDelete) { req async throws -> ParseHookResponse<Bool> in
+         trigger: .beforeDelete) { req async throws -> ParseHookResponse<Bool> in
     // Note that `ParseHookResponse<Bool>` means a "successfull"
     // response will return a "Bool" type. Bool is the standard response with
     // a "true" response meaning everything is okay or continue.
@@ -383,7 +400,7 @@ app.post("file", "delete", "before",
 
 // A Parse Hook Trigger route for `ParseLiveQuery`.
 app.post("connect", "before",
-         triggerName: .beforeConnect) { req async throws -> ParseHookResponse<Bool> in
+         trigger: .beforeConnect) { req async throws -> ParseHookResponse<Bool> in
     // Note that `ParseHookResponse<Bool>` means a "successfull"
     // response will return a "Bool" type. Bool is the standard response with
     // a "true" response meaning everything is okay or continue.
@@ -399,8 +416,8 @@ app.post("connect", "before",
 
 // Another Parse Hook Trigger route for `ParseLiveQuery`.
 app.post("score", "subscribe", "before",
-         className: GameScore.className,
-         triggerName: .beforeSubscribe) { req async throws -> ParseHookResponse<Bool> in
+         object: GameScore.self,
+         trigger: .beforeSubscribe) { req async throws -> ParseHookResponse<Bool> in
     // Note that `ParseHookResponse<Bool>` means a "successfull"
     // response will return a "Bool" type. Bool is the standard response with
     // a "true" response meaning everything is okay or continue.
@@ -416,8 +433,8 @@ app.post("score", "subscribe", "before",
 
 // Another Parse Hook Trigger route for `ParseLiveQuery`.
 app.post("score", "event", "after",
-         className: GameScore.className,
-         triggerName: .afterEvent) { req async throws -> ParseHookResponse<Bool> in
+         object: GameScore.self,
+         trigger: .afterEvent) { req async throws -> ParseHookResponse<Bool> in
     // Note that `ParseHookResponse<Bool>` means a "successfull"
     // response will return a "Bool" type. Bool is the standard response with
     // a "true" response meaning everything is okay or continue.
