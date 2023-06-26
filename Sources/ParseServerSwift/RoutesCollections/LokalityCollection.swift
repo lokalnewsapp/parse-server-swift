@@ -17,10 +17,17 @@ struct LokalityCollection: RouteCollection {
 //        lokalityGroup.post(use: postWelcome)
 //        lokalityGroup.get(use: getWelcome)
 
-        lokalityGroup.post("first", name:"first", use: getLokalityFirst)
+        lokalityGroup.post("get", name:"getLokality", use: getLokality)
+        //lokalityGroup.post("first", name:"first", use: getLokalityFirst)
     }
 }
     
+extension LokalityCollection {
+
+    enum LokalityKeys {
+        case name, tag
+    }
+}
 
 extension LokalityCollection {
     func getWelcome(req: Request) async throws -> String {
@@ -30,6 +37,33 @@ extension LokalityCollection {
     func postWelcome(req: Request) async throws -> String {
         return "postWelcome Hello"
     }
+    
+    func getLokality(req: Request) async throws -> ParseHookResponse<Lokality> {
+        
+        if let error: ParseHookResponse<Lokality> = checkHeaders(req) {
+            return error
+        }
+        
+        var parseRequest = try req.content
+            .decode(ParseHookFunctionRequest<User, LokalityParameters>.self)
+        let params = parseRequest.parameters
+        
+        // If a User called the request, fetch the complete user.
+        if parseRequest.user != nil {
+            parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
+        }
+    
+        
+        // Check Name or Tag
+        guard let name = params.name, let tag = params.tag else {
+            return ParseHookResponse(error: .init(code: .missingKey,
+                                                message: "Object not sent in request."))
+        }
+        
+        
+        return ParseHookResponse(success: Lokality())
+    }
+
     
     func getLokalityFirst(req: Request) async throws -> ParseHookResponse<GameScore> {
         
@@ -44,6 +78,7 @@ extension LokalityCollection {
         // If a User called the request, fetch the complete user.
         dump("parseRequest.user: \(parseRequest.user)")
         dump("parseRequest.gamescore: \(parseRequest.object)")
+        
         if parseRequest.user != nil {
             //do {
             //parseRequest = try await parseRequest.hydrateUser(request: req)
