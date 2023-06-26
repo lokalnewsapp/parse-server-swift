@@ -14,8 +14,8 @@ struct LokalityCollection: RouteCollection {
         
         let lokalityGroup = routes.grouped("lokality")
         
-//        lokalityGroup.post(use: postWelcome)
-//        lokalityGroup.get(use: getWelcome)
+        lokalityGroup.post(use: postWelcome)
+        lokalityGroup.get(use: getWelcome)
 
         lokalityGroup.post("get", name:"getLokalityByTag", use: getLokalityByTag)
         //lokalityGroup.post("first", name:"first", use: getLokalityFirst)
