@@ -17,7 +17,7 @@ struct LokalityCollection: RouteCollection {
 //        lokalityGroup.post(use: postWelcome)
 //        lokalityGroup.get(use: getWelcome)
 
-        lokalityGroup.post("get", name:"getLokality", use: getLokality)
+        lokalityGroup.post("get", name:"getLokalityByTag", use: getLokalityByTag)
         //lokalityGroup.post("first", name:"first", use: getLokalityFirst)
     }
 }
@@ -38,7 +38,7 @@ extension LokalityCollection {
         return "postWelcome Hello"
     }
     
-    func getLokality(req: Request) async throws -> ParseHookResponse<Lokality> {
+    func getLokalityByTag(req: Request) async throws -> ParseHookResponse<Lokality> {
         
         if let error: ParseHookResponse<Lokality> = checkHeaders(req) {
             return error
@@ -55,9 +55,9 @@ extension LokalityCollection {
     
         
         // Check Name or Tag
-        guard let name = params.name, let tag = params.tag else {
-            return ParseHookResponse(error: .init(code: .missingKey,
-                                                message: "Object not sent in request."))
+        guard let tag = params.tag else {
+            return ParseHookResponse(error: .init(code: .other,
+                                                message: "Tag not sent in request."))
         }
         
         
