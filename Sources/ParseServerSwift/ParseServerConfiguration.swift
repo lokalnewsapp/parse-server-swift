@@ -56,18 +56,7 @@ public struct ParseServerConfiguration {
         self.applicationId = applicationId
         self.primaryKey = primaryKey
         app.http.server.configuration.hostname = Environment.process.PARSE_SERVER_SWIFT_HOST_NAME ?? "localhost"
-        
-        if let envPort = Environment.process.PARSE_SERVER_SWIFT_PORT {
-            app.http.server.configuration.port = Int(Environment.process.PARSE_SERVER_SWIFT_PORT ?? 8081)
-        } else {
-            //app.http.server.configuration.port = 0
-        }
-//
-//        app.http.server.configuration.hostname == "localhost" || app.http.server.configuration.hostname == "127.0.0.1"  {
-//            app.http.server.configuration.port = Int(Environment.process.PARSE_SERVER_SWIFT_PORT ?? 8081)
-//        } else {
-//            app.http.server.configuration.port = Int(Environment.process.PARSE_SERVER_SWIFT_PORT)
-//        }
+        app.http.server.configuration.port = Int(Environment.process.PARSE_SERVER_SWIFT_PORT ?? 8081)
         app.http.server.configuration.tlsConfiguration = tlsConfiguration
         // swiftlint:disable:next line_length
         app.routes.defaultMaxBodySize = ByteCount(stringLiteral: Environment.process.PARSE_SERVER_SWIFT_DEFAULT_MAX_BODY_SIZE ?? "16kb")

@@ -146,7 +146,12 @@ public func buildServerURL(from configuration: HTTPServer.Configuration) -> Stri
     let addressDescription: String
     switch configuration.address {
     case .hostname(let hostname, let port):
-        addressDescription = "\(scheme)://\(hostname ?? configuration.hostname):\(port ?? configuration.port)"
+        if configuration.hostname == "localhost" || configuration.hostname == "127.0.0.1" {
+            addressDescription = "\(scheme)://\(hostname ?? configuration.hostname):\(port ?? configuration.port)"
+        } else {
+            addressDescription = "\(scheme)://\(hostname ?? configuration.hostname)"
+        }
+        
     case .unixDomainSocket(let socketPath):
         addressDescription = "\(scheme)+unix: \(socketPath)"
     }
