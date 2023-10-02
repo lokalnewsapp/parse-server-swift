@@ -7,6 +7,7 @@
 
 import ParseSwift
 import Vapor
+import CoreLocation
 
 /**
  Parameters for the Lokality Parse Hook Function.
@@ -14,6 +15,9 @@ import Vapor
 struct LokalityParameters: ParseHookParametable {
     var name: String?
     var tag: String?
+    var center: Coordinate?
+    var description: String?
+    var limit: Int?
 }
 
 extension LokalityParameters: Validatable {

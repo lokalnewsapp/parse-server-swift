@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "countries",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lokalnewsapp/Countries.git",
+      "state" : {
+        "revision" : "b240c113f6035426bf04332119cf98d825e1b0a6",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "multipart-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/multipart-kit.git",
@@ -41,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/netreconlab/Parse-Swift.git",
       "state" : {
-        "revision" : "fc516a6e48c1c150a0ecac94910bc8dcedfc2e71",
-        "version" : "5.8.1"
+        "revision" : "5c3118cd5b50a5d8c0d0e97a75a32efafedfedda",
+        "version" : "5.8.2"
       }
     },
     {

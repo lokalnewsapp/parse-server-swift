@@ -17,6 +17,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.83.2")),
+        .package(url: "https://github.com/lokalnewsapp/Countries.git", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/netreconlab/Parse-Swift.git",
                  .upToNextMajor(from: "5.8.1"))
     ],
@@ -25,6 +26,7 @@ let package = Package(
             name: "ParseServerSwift",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
+                .product(name: "Countries", package: "Countries"),
                 .product(name: "ParseSwift", package: "Parse-Swift")
             ]),
         .executableTarget(name: "App",
