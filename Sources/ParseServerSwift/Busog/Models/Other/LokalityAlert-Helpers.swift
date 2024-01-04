@@ -1,7 +1,7 @@
 // Copyright © 2020 jay.ph. All rights reserved.
 
 import Foundation
-import SwiftUI
+//import SwiftUI
 
 // MARK: - --------------  ALERT Helpers  --------------
 enum AlertState {
