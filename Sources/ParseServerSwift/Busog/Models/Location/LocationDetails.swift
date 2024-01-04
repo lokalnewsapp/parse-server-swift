@@ -8,7 +8,7 @@
 import Foundation
 import ParseSwift
 import Countries
-import CoreLocation
+// import CoreLocation
 
 typealias ParentDetails = LocationDetails
 
