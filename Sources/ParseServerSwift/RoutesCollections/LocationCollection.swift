@@ -14,7 +14,7 @@ struct LocationCollection: RouteCollection {
         
         let locationGroup = routes.grouped("location")
         
-        locationGroup.post("create", name:"createLocationWithCenter", use: createLocationWithCenter)
+        //locationGroup.post("create", name:"createLocationWithCenter", use: createLocationWithCenter)
 //        locationGroup.post("test", name:"testQuery", use: testQuery)
     }
 }
@@ -45,47 +45,47 @@ extension LocationCollection {
 //
 //    }
     
-    func createLocationWithCenter(req: Request) async throws -> ParseHookResponse<Location> {
-        
-        if let error: ParseHookResponse<Location> = checkHeaders(req) {
-            return error
-        }
-        
-        var parseRequest = try req.content
-            .decode(ParseHookFunctionRequest<User, LocationParameters>.self)
-        
-        // If a User called the request, fetch the complete user.
-        if parseRequest.user != nil {
-//            parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
-            parseRequest = try await parseRequest.hydrateUser(request: req)
-        }
-    
-        let params = parseRequest.parameters
-
-        // Check long and lat
-        guard let center = params.center else {
-            return ParseHookResponse(error: .init(code: .other,
-                                                message: "Center not sent in request."))
-        }
-
-        //: 2a. GetLocation based on given name if available
-        if let center = params.center {
-            do {
-                
-                let options = parseRequest.options()
-                
-                let location = try await LocationStore().getLocation(options: options, byName: params.name ?? "", andCenter: center)
-                
-                print("\n\n Found: \(location.name) tag: \(location.details?.mainTag) \n\n")
-                
-                return ParseHookResponse(success: location)
-            } catch {
-                throw LOKError(.failedToGetLocation, message: "No location found.")
-            }
-            
-        } else {
-            throw LOKError(.failedToGetLocation, message: "No device coordinates available.")
-        }
+//    func createLocationWithCenter(req: Request) async throws -> ParseHookResponse<Location> {
+//        
+//        if let error: ParseHookResponse<Location> = checkHeaders(req) {
+//            return error
+//        }
+//        
+//        var parseRequest = try req.content
+//            .decode(ParseHookFunctionRequest<User, LocationParameters>.self)
+//        
+//        // If a User called the request, fetch the complete user.
+//        if parseRequest.user != nil {
+////            parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
+//            parseRequest = try await parseRequest.hydrateUser(request: req)
+//        }
+//    
+//        let params = parseRequest.parameters
+//
+//        // Check long and lat
+//        guard let center = params.center else {
+//            return ParseHookResponse(error: .init(code: .other,
+//                                                message: "Center not sent in request."))
+//        }
+//
+//        //: 2a. GetLocation based on given name if available
+//        if let center = params.center {
+//            do {
+//                
+//                let options = parseRequest.options()
+//                
+//                let location = try await LocationStore().getLocation(options: options, byName: params.name ?? "", andCenter: center)
+//                
+//                print("\n\n Found: \(location.name) tag: \(location.details?.mainTag) \n\n")
+//                
+//                return ParseHookResponse(success: location)
+//            } catch {
+//                throw LOKError(.failedToGetLocation, message: "No location found.")
+//            }
+//            
+//        } else {
+//            throw LOKError(.failedToGetLocation, message: "No device coordinates available.")
+//        }
 
        
 //        do {
@@ -163,6 +163,6 @@ extension LocationCollection {
 //        }
 //    }
 //    
-}
+//}
 
 

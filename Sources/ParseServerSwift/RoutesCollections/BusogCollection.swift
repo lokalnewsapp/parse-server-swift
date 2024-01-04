@@ -7,7 +7,7 @@
 
 import Vapor
 import ParseSwift
-import CoreLocation
+//import CoreLocation
 
 struct BusogCollection: RouteCollection {
 

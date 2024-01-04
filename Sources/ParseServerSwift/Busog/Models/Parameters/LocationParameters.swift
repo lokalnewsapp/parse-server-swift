@@ -14,7 +14,7 @@ import Vapor
 struct LocationParameters: ParseHookParametable {
     var name: String?
     var center: ParseGeoPoint?
-    var details: LocationDetails?
+//    var details: LocationDetails?
     //var long: Double?
     //var lat: Double?
 }

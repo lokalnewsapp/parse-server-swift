@@ -17,6 +17,7 @@ struct LocationDetails: ParseObject, Identifiable, Equatable {
     //: For Identifiable
     var id: String? { objectId }
 
+    //: These are required for `ParseObject`.
     var originalData: Data?
     var objectId: String?
     var createdAt: Date?
@@ -28,35 +29,43 @@ struct LocationDetails: ParseObject, Identifiable, Equatable {
     var name: String?
     var nameSuffix: String?
     var altNames: [String]?
-    var countryCode: String?
-    var placemark: LocationPlacemark?
-
-    var areaType: LocationAreaType?
-    var center: ParseGeoPoint?
-    var radius: Double?
-    var boundary: [ParseGeoPoint]?
-
-    var mainTag: Tag?
-    var mainTagString: String?
-    var featuredImage: LokalityImage?
 
     // Description
     var description: String?
     var descriptionMore: String?
     var descriptionBy: Pointer<User>?
 
+    var tag: String?
+    var areaType: LocationAreaType?
+    var placemark: LocationPlacemark?
+    var center: ParseGeoPoint?
+    var radius: Double?
+    var boundary: [ParseGeoPoint]?
+    var address: String?
+    var phone: [String]?
+    var countryCode: String?
+    var featuredImage: LokalityImage?
+
+    //: Computed Properties
+    var fullName: String? {
+         return "\(namePrefix ?? "") \(name ?? "") \(nameSuffix ?? "")"
+    }
+
     //: ParseRelations
     var tags: ParseRelation<Self>? {
-        try? ParseRelation(parent: self, key: "tags")
+        try? ParseRelation(parent: self, key: "tags", object: Tag.self)
     }
 
     var images: ParseRelation<Self>? {
-        try? ParseRelation(parent: self, key: "images")
+        try? ParseRelation(parent: self, key: "images", object: LokalityImage.self)
     }
 
-    var nearBy: ParseRelation<Self>? {
-        try? ParseRelation(parent: self, key: "nearBy")
+    var nearby: ParseRelation<Self>? {
+        try? ParseRelation(parent: self, key: "nearby", object: Location.self)
     }
+
+    //: For legacy code that still uses mainTagString
+    var mainTagString: String? { self.tag }
 
     // MARK: - --------------  Inits  ---------------
     init() {
@@ -70,7 +79,7 @@ struct LocationDetails: ParseObject, Identifiable, Equatable {
         ACL                     = acl
     }
 
-    // Init for Creating a New Location
+    //: Init for Creating a New Location
     init(newLocation: Bool = true, locationPlacemark: LocationPlacemark, radius: Double? = 1.0) {
         self.init()
         self.name               = locationPlacemark.name
@@ -129,12 +138,12 @@ extension Country {
     var objectId: String? {
         switch self {
 
-        case .canada: return "UqRlvvpwWq"
-        case .hongKong: return "lqpa4Nap0v"
-        case .japan: return "ZlBzLXspBI"
-        case .philippines: return "hniVsRWAnN"
-        case .southKorea: return "VEXP3BEz0i"
-        case .unitedStates: return "9h5vpvh7Ul"
+        // case .canada: return "UqRlvvpwWq"
+        // case .hongKong: return "lqpa4Nap0v"
+        // case .japan: return "ZlBzLXspBI"
+        case .philippines: return "1F3aNrPkhF"
+        // case .southKorea: return "VEXP3BEz0i"
+        case .unitedStates: return "fh8TMFFKOo"
 
         default:
             return nil
