@@ -11,3 +11,8 @@ import Foundation
 public protocol ObjectIdable {
     var objectId: String { get }
 }
+
+public protocol JSONable {
+    associatedtype Element = Self
+    static var jsonfile: [Element] { get }
+}

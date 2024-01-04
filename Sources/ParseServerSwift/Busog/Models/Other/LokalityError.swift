@@ -92,10 +92,7 @@ public struct LokalityError: Decodable, Swift.Error, Equatable {
         case passwordTooLong
         case passwordContainsSpaces
 
-        //: Tag Codes
-        case noTag
-
-        //: Location Codes
+        //: Location Codes 3000
         case noPlacemark
         case noNameData
         case noPlacemarkName
@@ -111,9 +108,12 @@ public struct LokalityError: Decodable, Swift.Error, Equatable {
         case failedToGetLocationPlacemark
         case failedToGetCLPlacemark
         case searchLocationFailed
+        
+        //: Lokality Codes 3500
+        case failedToGetLokality
         case searchLokalityFailed
 
-        //: Post Codes
+        //: Post Codes 4000
         case notAValidUrl
         case noPostPreview
         case cannotGetPreview
@@ -124,11 +124,14 @@ public struct LokalityError: Decodable, Swift.Error, Equatable {
         case failedToSavePost
         case failedToGetPost
 
-        //: File
+        //: Tag Codes 5000
+        case noTag
+        
+        //: File 6000
         case noFileAttached
         case fileNotFound
 
-        //: Log
+        //: Log 7000
         case failedToSaveLog
 
         //: Type Aliases from ParseError.Code that we use in Lokality
@@ -212,7 +215,6 @@ public struct LokalityError: Decodable, Swift.Error, Equatable {
             case .noAddressEntered: return "No Address Data."
             case .noTag: return "No Tag Found."
             case .searchLocationFailed: return "Search Location Failed."
-            case .searchLokalityFailed: return "Search Lokality Failed."
 
             case .failedToBuildLocationTree: return "Failed to build Location Tree."
             case .failedBuildAddressForPlacemark: return "Failed to build Address for Placemark."
@@ -221,6 +223,10 @@ public struct LokalityError: Decodable, Swift.Error, Equatable {
             case .failedToGetLocation: return "Failed to get Location."
             case .failedToGetLocationPlacemark: return "Failed to get LocationPlacemark."
             case .failedToGetCLPlacemark: return "Failed to get CLPlacemark."
+
+            //: Lokality
+            case .failedToGetLokality: return "Failed to get Lokality"
+            case .searchLokalityFailed: return "Search Lokality Failed."
 
             //: Post Related
             case .notAValidUrl: return "URL is Not Valid."
@@ -300,7 +306,6 @@ public struct LokalityError: Decodable, Swift.Error, Equatable {
             case .noDeviceCoordinate: return 3006
             case .noAddressEntered: return 3007
             case .searchLocationFailed: return 3008
-            case .searchLokalityFailed: return 3009
 
             case .failedToBuildLocationTree: return 3100
             case .failedBuildAddressForPlacemark: return 3101
@@ -309,6 +314,11 @@ public struct LokalityError: Decodable, Swift.Error, Equatable {
             case .failedToGetLocation: return 3104
             case .failedToGetLocationPlacemark: return 3105
             case .failedToGetCLPlacemark: return 3106
+
+            //: Lokality
+            case .failedToGetLokality: return 3501
+            case .searchLokalityFailed: return 3502
+
 
             //: Post Codes
             case .notAValidUrl: return 4001
@@ -334,20 +344,19 @@ public struct LokalityError: Decodable, Swift.Error, Equatable {
         }
 
         //: Title for use with Alert.
-//        var title: AlertTitles {
-//            switch self {
-//            case .noInternetConnection: return .uhoh
-//
-//            case .invalidCredentials: return .whoops
-//            case .passwordNeedsUppercase: return .oops
-//            case .passwordNeedsLowercase: return .oops
-//            case .passwordNeedsSpecialCharacter: return .oops
-//            case .passwordTooLong: return .oops
-//
-//            default:
-//                return .error
-//            }
-//        }
+        var title: AlertTitles {
+            switch self {
+            case .noInternetConnection: return .uhoh
+            case .invalidCredentials: return .whoops
+            case .passwordNeedsUppercase: return .oops
+            case .passwordNeedsLowercase: return .oops
+            case .passwordNeedsSpecialCharacter: return .oops
+            case .passwordTooLong: return .oops
+
+            default:
+                return .error
+            }
+        }
 
         //: Equatable
         public static func == (lhs: LokalityError.Code, rhs: LokalityError.Code) -> Bool {

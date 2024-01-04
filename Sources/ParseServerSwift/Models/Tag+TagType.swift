@@ -136,3 +136,17 @@ extension String {
         }
     }
 }
+
+extension Array where Element == String { 
+    
+    /// Get a clean Array of Strings based on the given String separated by a ","
+    /// - returns: A String array representing Tags cleaned up via cleanTag()
+    func getCleanTags() -> [String]? {
+        
+        if self.count < 1 {
+          return nil
+        } else {
+            return Tag().cleanTagArray(self)
+        }
+    }
+}

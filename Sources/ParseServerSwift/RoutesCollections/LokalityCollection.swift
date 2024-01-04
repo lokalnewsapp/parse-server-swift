@@ -19,31 +19,25 @@ struct LokalityCollection: RouteCollection {
         lokalityGroup.post(use: postWelcome)
         lokalityGroup.get(use: getWelcome)
 
-        lokalityGroup.post("getByTag", name:"getLokalityByTag", use: getLokalityByTag)
-        lokalityGroup.post("getByName", name:"getLokalityByName", use: getLokalityByName)
-        lokalityGroup.post("getAll", name:"getAllLokalities", use: getAllLokalities)
-        lokalityGroup.post("random", name:"getRandomLokality", use: getRandomLokality)
+        //:: Get Methods
+        lokalityGroup.post("get", "tag", name:"getLokalityByTag", use: getLokalityByTag)
+        lokalityGroup.post("get", "id", name:"getLokalityByObjectId", use: getLokalityByObjectId)
+        lokalityGroup.post("get", "name", name:"getLokalityByName", use: getLokalityByName)
+        lokalityGroup.post("get", "all", name:"getAllLokalities", use: getAllLokalities)
+        lokalityGroup.post("get", "nearYou", name:"getLokalitiesNearYou", use: getLokalitiesNearYou)
+        lokalityGroup.post("get", "random", name:"getRandomLokality", use: getRandomLokality)
+        
         lokalityGroup.post("search", name:"searchLokalities", use: searchLokalities)
-        lokalityGroup.post("getNearYou", name:"getLokalitiesNearYou", use: getLokalitiesNearYou)
-    }
-}
-    
-extension LokalityCollection {
+        
+        
+        //:: Create Lokality Methods
+        lokalityGroup.post("create", "new", name:"createLokality", use: createLokality)
+        lokalityGroup.post("delete", name:"deleteLokality", use: deleteLokality)
 
-    enum LokalityKeys {
-        case name, tag
     }
-    
 }
 
 extension LokalityCollection {
-    func getWelcome(req: Request) async throws -> String {
-        return "getWelcome Hello"
-    }
-    
-    func postWelcome(req: Request) async throws -> String {
-        return "postWelcome Hello"
-    }
     
     func getLokalityByTag(req: Request) async throws -> ParseHookResponse<Lokality> {
         
@@ -59,23 +53,90 @@ extension LokalityCollection {
         if parseRequest.user != nil {
             parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
         }
-    
+        
         // Check Tag
         guard let tag = params.tag else {
             return ParseHookResponse(error: .init(code: .other,
-                                                message: "Tag not sent in request."))
+                                                  message: "Tag not sent in request."))
         }
+        
+        let options = try parseRequest.options(req)
+        
+        do {
+            let queries = Lokality.createLokalityTagQueries(from: tag)
+            
+            //: We use .find instead of .first so we can check if there are more than 1 Lokality using the same Tag and alert admin if so.
+            let lokalities = try await Lokality.query(or(queries: queries))
+                .includeAll()
+                .find(options: options)
+            
+            //: Check if there's more than one result returned.
+            //: If so, alert admin
+            // TODO: alert admin function here
+            
+            //: Get the 1st result
+            if let lokality = lokalities.first {
+                
+                //: Get LokalityCustom if it exists
+                if lokality.lokalityCustom != nil {
+                    try await lokality.lokalityCustom?.fetch(options: options)
+                }
+                
+                return ParseHookResponse(success: lokality)
+            } else {
+                return ParseHookResponse(error: ParseError(code: .objectNotFound, message: "Lokality Not Found By Tag"))
+            }
+            
+        } catch {
+            print("Error: \(error)")
+            return ParseHookResponse(error: error as! ParseError)
+        }
+        
+    }
+    
+    func getLokalityByObjectId(req: Request) async throws -> ParseHookResponse<Lokality> {
+        
+        if let error: ParseHookResponse<Lokality> = checkHeaders(req) {
+            return error
+        }
+        
+        var parseRequest = try req.content
+            .decode(ParseHookFunctionRequest<User, LokalityParameters>.self)
+        let params = parseRequest.parameters
+        
+        // If a User called the request, fetch the complete user.
+        if parseRequest.user != nil {
+            parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
+        }
+        
+        // Check ObjectId
+        guard let objectId = params.objectId else {
+            return ParseHookResponse(error: .init(code: .other,
+                                                  message: "ObjectId not sent in request."))
+        }
+        
+        let options = try parseRequest.options(req)
         
         do {
             let lokality = try await Lokality.query()
-                .where("tag" == tag)
-                .first(options: [.usePrimaryKey])
+                .includeAll()
+                .where("objectId" == objectId)
+                .first(options: options)
+            
+            //: Get LokalityCustom if it exists
+//            if lokality.lokalityCustom != nil {
+//                try await lokality.lokalityCustom?.fetch(options: options)
+//            }
+            
             return ParseHookResponse(success: lokality)
+            
         } catch {
+            print("Error: \(error)")
             throw error
         }
-
+        
     }
+    
     
     func getLokalityByName(req: Request) async throws -> ParseHookResponse<Lokality> {
         
@@ -91,24 +152,35 @@ extension LokalityCollection {
         if parseRequest.user != nil {
             parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
         }
-    
+        
         // Check Name
         guard let name = params.name else {
             return ParseHookResponse(error: .init(code: .other,
-                                                message: "Name not sent in request."))
+                                                  message: "Name not sent in request."))
         }
         
+        let options = try parseRequest.options(req)
+        
         do {
-            let lokality = try await Lokality.query()
-                .where("name" == name)
-                .first(options: [.usePrimaryKey])
+            let queries = Lokality.createLokalityNameQueries(from: name)
+            
+            let lokality = try await Lokality.query(or(queries: queries))
+                .includeAll()
+                .first(options: options)
+            
+            //: Get LokalityCustom if it exists
+            if lokality.lokalityCustom != nil {
+                try await lokality.lokalityCustom?.fetch(options: options)
+            }
+            
             return ParseHookResponse(success: lokality)
         } catch {
+            print("Error: \(error)")
             throw error
         }
-
+        
     }
-
+    
     
     func getRandomLokality(req: Request) async throws -> ParseHookResponse<Lokality> {
         
@@ -118,19 +190,28 @@ extension LokalityCollection {
         
         var parseRequest = try req.content
             .decode(ParseHookFunctionRequest<User, LokalityParameters>.self)
-        let params = parseRequest.parameters
         
         // If a User called the request, fetch the complete user.
         if parseRequest.user != nil {
             parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
         }
-    
+        
+        let options = try parseRequest.options(req)
+        
         do {
             let result = try await Lokality.query()
+                .where("isActive" == true)
                 .findAll(options: [.usePrimaryKey])
             let lokality = result[Int.random(in: 1...result.count)]
+            
+            //: Get LokalityCustom if it exists
+            if lokality.lokalityCustom != nil {
+                try await lokality.lokalityCustom?.fetch(options: options)
+            }
+            
             return ParseHookResponse(success: lokality)
         } catch {
+            print("Error: \(error)")
             throw error
         }
     }
@@ -151,16 +232,19 @@ extension LokalityCollection {
             parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
         }
         
-              
+        
         // Check Limit
         let limit = params.limit ?? 20
         
         do {
             let result = try await Lokality.query()
+                .where("isActive" == true)
+                .limit(limit)
                 .find(options: [.usePrimaryKey])
             //let lokality = result[Int.random(in: 1...result.count)]
             return ParseHookResponse(success: result)
         } catch {
+            print("Error: \(error)")
             throw error
         }
     }
@@ -184,43 +268,146 @@ extension LokalityCollection {
         // Check Name
         guard let name = params.name else {
             return ParseHookResponse(error: .init(code: .other,
-                                                message: "Search string not sent in request."))
+                                                  message: "Search string not sent in request."))
         }
-        // Clean up search string
-        let searchString = name.trimmed()
-
-        // We constrain the search to name, altNames, and mainTagString fields
-        let constraints = matchesRegex(key: "name", regex: searchString)
-        let query1 = Lokality.query(constraints)
-        let constraints2 = matchesRegex(key: "altNames", regex: searchString, modifiers: "i")
-        let query2 = Lokality.query(constraints2)
-        let constraints3 = matchesRegex(key: "tag", regex: searchString.replacingOccurrences(of: " ", with: ""), modifiers: "i")
-        let query3 = Lokality.query(constraints3)
-        let constraints4 = matchesRegex(key: "altTags", regex: searchString.replacingOccurrences(of: " ", with: ""), modifiers: "i")
-        let query4 = Lokality.query(constraints4)
-
-//        let mainQuery = Lokality.query(or(queries: [query1, query2, query3, query4]))
-//            .where("active" == true)
-//            .includeAll()
-//            .find()
-
+        
+        let queries = Lokality.createLokalityNameTagQueries(from: name)
+        
         do {
-            let foundLokalities = try await Lokality.query(or(queries: [query1, query2, query3, query4]))
+            let foundLokalities = try await Lokality.query(or(queries: queries))
                 .where("isActive" == true)
                 .includeAll()
                 .find(options: [.usePrimaryKey])
             
-//            let foundLocations = try await mainQuery.limit(20).includeAll().find()
             print("Number of found Lokalities: \(foundLokalities.count)")
-           
             return ParseHookResponse(success: foundLokalities)
-
+            
         } catch {
-            print(error)
+            print("Error: \(error)")
             throw LOKError(.searchLokalityFailed)
         }
-       
+        
     }
+    
+}
+
+
+
+extension LokalityCollection {
+    
+    func createLokality(req: Request) async throws -> ParseHookResponse<Lokality> {
+        
+        if let error: ParseHookResponse<Lokality> = checkHeaders(req) {
+            return error
+        }
+        
+        var parseRequest = try req.content
+            .decode(ParseHookFunctionRequest<User, LokalityParameters>.self)
+        let params = parseRequest.parameters
+        
+        // If a User called the request, fetch the complete user.
+        if parseRequest.user != nil {
+            parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
+        }
+    
+        // Check Tag
+        guard let name = params.name, let tag = params.tag else {
+            return ParseHookResponse(error: .init(code: .other,
+                                                message: "Name or Tag not sent in request."))
+        }
+
+        let options = try parseRequest.options(req)
+
+        
+        do {
+            var new = Lokality()
+            new.name                    = name
+            new.altNames                = params.altNames
+            new.tag                     = tag.cleanTag()
+            new.altTags                 = params.altTags?.getCleanTags()
+            new.center                  = params.center?.toParseGeoPoint()
+            new.radius                  = 1
+            new.slogan                  = params.slogan
+            new.description             = params.description
+            new.lokalityType            = params.lokalityType ?? LokalityType(.establishment)
+            new.lokalityTypeDetails     = params.lokalityTypeDetails
+            new.lokalityCustom          = params.lokalityCustom
+            new.isActive                = true
+            new.isFeatured              = false
+            new.status                  = Status(.active)
+            
+            var ACL                     = ParseACL()
+            ACL.publicRead              = true
+            ACL.publicWrite             = false
+            new.ACL                     = ACL
+            
+            new.addedBy                 = try parseRequest.user?.toPointer()
+            
+
+            try await new.save(options: options)
+            
+            return ParseHookResponse(success: new)
+        } catch {
+            print("Error: \(error)")
+            throw error
+        }
+
+    }
+
+    
+    func deleteLokality(req: Request) async throws -> ParseHookResponse<Bool> {
+        if let error: ParseHookResponse<Bool> = checkHeaders(req) {
+            return error
+        }
+        
+        var parseRequest = try req.content
+            .decode(ParseHookFunctionRequest<User, LokalityParameters>.self)
+        
+        let params = parseRequest.parameters
+        let options = try parseRequest.options(req)
+
+        // If a User called the request, fetch the complete user.
+        if parseRequest.user != nil {
+            parseRequest = try await parseRequest.hydrateUser(options: [.usePrimaryKey], request: req)
+        }
+    
+        // Check Tag
+        guard let objectId = params.objectId else {
+            return ParseHookResponse(error: .init(code: .other,
+                                                message: "objectId not sent in request."))
+        }
+        
+        do {
+            let lokality = try await Lokality().getById(objectId)
+            print("Delete Lokality with objectId \(lokality.objectId)")
+            try await lokality.delete(options: [.usePrimaryKey])
+            print("Delete Lokality with objectId \(lokality.objectId)")
+            return ParseHookResponse(success: true)
+
+        } catch {
+            print("Error: \(error)")
+            throw error
+        }
+    }
+}
+
+extension LokalityCollection {
+
+    // MARK: - --------------  For Testing  ---------------
+    func getWelcome(req: Request) async throws -> String {
+        return "getWelcome Hello"
+    }
+    
+    func postWelcome(req: Request) async throws -> String {
+        return "postWelcome Hello"
+    }
+    
+    
+    // MARK: - --------------  Untested for Busog  ---------------
+   
+    
+    
+    
     
     
     /// Get Locations Near You
@@ -255,8 +442,11 @@ extension LokalityCollection {
         constraints.append(contentsOf: withinKilometers(key: "center", geoPoint: geoPoint, distance: 1))
         
         do {
-            let query = Lokality.query(constraints).where("isActive" == true)
-            let foundLokalities = try await query.limit(10).includeAll().find()
+            let foundLokalities = try await Lokality.query(constraints)
+                .where("isActive" == true)
+                .limit(10)
+                .includeAll()
+                .find()
            
             return ParseHookResponse(success: foundLokalities)
 
@@ -267,5 +457,6 @@ extension LokalityCollection {
     
     
 }
+
 
 

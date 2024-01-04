@@ -6,7 +6,12 @@
 //
 
 import Foundation
+import ParseSwift
 
 struct Coordinate: Codable, Hashable {
     let latitude, longitude: Double
+    
+    func toParseGeoPoint() -> ParseGeoPoint {
+        return try! ParseGeoPoint(latitude: self.latitude, longitude: self.longitude)
+    }
 }

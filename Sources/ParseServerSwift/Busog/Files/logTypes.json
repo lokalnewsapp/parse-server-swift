@@ -1,0 +1,26 @@
+[
+    {
+        "objectId": "cWGHeftsbj",
+        "name": "Alert",
+        "type": "alert",
+        "description": "Alert Admin"
+    },
+    {
+        "objectId": "8v2EDg2swx",
+        "name": "Error",
+        "type": "error",
+        "description": "Error Logs"
+    },
+    {
+        "objectId": "KAqDRQIbWV",
+        "name": "Info",
+        "type": "info",
+        "description": "Information"
+    },
+    {
+        "objectId": "g94lB4Y8KS",
+        "name": "Debug",
+        "type": "debug",
+        "description": "Debug Information"
+    }
+]

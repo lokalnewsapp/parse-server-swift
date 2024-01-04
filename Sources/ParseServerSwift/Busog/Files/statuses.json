@@ -1,0 +1,128 @@
+[
+    {
+        "objectId": "g5ru4YiAPV",
+        "name": "Banned",
+        "description": "Object is banned from Lokality",
+        "level": 50,
+        "type": "banned",
+        "note": "User or Any other object"
+    },
+    {
+        "objectId": "8J9Yy6KYW1",
+        "description": "While an object is being reviewed by admins.",
+        "name": "Under Review",
+        "level": 11,
+        "type": "underReview",
+        "note": "",
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        }
+    },
+    {
+        "objectId": "DkHYEUqpNy",
+        "name": "Flagged",
+        "description": "This means someone reported the Post/User but have yet to be checked by admin. ",
+        "level": 10,
+        "type": "flagged",
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        }
+    },
+    {
+        "objectId": "m0c8VeQsOe",
+        "name": "For Deletion",
+        "description": "This item will be deleted",
+        "level": 999,
+        "type": "forDeletion"
+    },
+    {
+        "objectId": "okoGPjEtHk",
+        "name": "Closed",
+        "level": 101,
+        "description": "Closed. i.e. For Reports",
+        "type": "closed"
+    },
+    {
+        "objectId": "OP4SORpYya",
+        "type": "unknown",
+        "name": "Unknown",
+        "level": 0,
+        "description": "We don’t know the status off hand. This object needs to be checked.",
+        "ACL": {
+            "*": {
+                "read": true
+            }
+        }
+    },
+    {
+        "objectId": "SNgvAxmGYc",
+        "name": "Permanently Closed",
+        "description": "Location or Lokality has shut down.",
+        "level": 102,
+        "type": "permanentlyClosed",
+        "note": ""
+    },
+    {
+        "objectId": "8lOLcHlRsh",
+        "name": "Open",
+        "description": "Establishment is open",
+        "level": 100,
+        "type": "open",
+        "note": "Busog Statuses begin at 100"
+    },
+    {
+        "objectId": "qBFIGj7o27",
+        "name": "Moved",
+        "description": "Establishment Moved to another location",
+        "level": 105,
+        "type": "moved"
+    },
+    {
+        "objectId": "fok7uhGt7F",
+        "type": "underRenovation",
+        "name": "Under Renovation",
+        "description": "Under Renovation",
+        "level": 104
+    },
+    {
+        "objectId": "XBjSdFwBKF",
+        "name": "Temporarily Closed",
+        "type": "temporarilyClosed",
+        "description": "Temporarily Closed",
+        "level": 103
+    },
+    {
+        "objectId": "y2QA1VKTEF",
+        "description": "Review process has been done and no way to bring this back.",
+        "name": "Permanently Banned",
+        "type": "permanentlyBanned",
+        "level": 51
+    },
+    {
+        "objectId": "urdvHoBdt9",
+        "type": "locked",
+        "name": "Locked",
+        "description": "There shouldn't be anymore changes to this object",
+        "level": 5,
+        "note": "For Menus or Lokality"
+    },
+    {
+        "objectId": "jNOusSMkVK",
+        "name": "Active",
+        "type": "active",
+        "description": "Is Active",
+        "level": 1,
+        "note": ""
+    },
+    {
+        "objectId": "mCvRC9i62A",
+        "type": "inactive",
+        "name": "Inactive",
+        "description": "Inactive",
+        "level": 2
+    }
+]

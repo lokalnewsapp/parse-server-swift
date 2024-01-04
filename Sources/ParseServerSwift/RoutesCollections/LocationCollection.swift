@@ -15,35 +15,35 @@ struct LocationCollection: RouteCollection {
         let locationGroup = routes.grouped("location")
         
         locationGroup.post("create", name:"createLocationWithCenter", use: createLocationWithCenter)
-        locationGroup.post("test", name:"testQuery", use: testQuery)
+//        locationGroup.post("test", name:"testQuery", use: testQuery)
     }
 }
     
 extension LocationCollection {
     
-    func testQuery(req: Request) async throws -> ParseHookResponse<[GameScore]> {
-        if let error: ParseHookResponse<[GameScore]> = checkHeaders(req) {
-            return error
-        }
-        
-        var parseRequest = try req.content
-            .decode(ParseHookFunctionRequest<User, FooParameters>.self)
-         
-        req.logger.info("parseRequest: \(parseRequest)")
-
-        // If a User called the request, fetch the complete user.
-        if parseRequest.user != nil {
-            parseRequest = try await parseRequest.hydrateUser(request: req)
-        }
-        
-        //req.logger.info("parseRequest after hydrateUser:  \(parseRequest)")
-        
-        let options = try parseRequest.options(req)
-        let scores = try await GameScore.query.findAll(options: options)
-        
-        return ParseHookResponse(success: scores)
-
-    }
+//    func testQuery(req: Request) async throws -> ParseHookResponse<[GameScore]> {
+//        if let error: ParseHookResponse<[GameScore]> = checkHeaders(req) {
+//            return error
+//        }
+//        
+//        var parseRequest = try req.content
+//            .decode(ParseHookFunctionRequest<User, FooParameters>.self)
+//         
+//        req.logger.info("parseRequest: \(parseRequest)")
+//
+//        // If a User called the request, fetch the complete user.
+//        if parseRequest.user != nil {
+//            parseRequest = try await parseRequest.hydrateUser(request: req)
+//        }
+//        
+//        //req.logger.info("parseRequest after hydrateUser:  \(parseRequest)")
+//        
+//        let options = try parseRequest.options(req)
+//        let scores = try await GameScore.query.findAll(options: options)
+//        
+//        return ParseHookResponse(success: scores)
+//
+//    }
     
     func createLocationWithCenter(req: Request) async throws -> ParseHookResponse<Location> {
         
