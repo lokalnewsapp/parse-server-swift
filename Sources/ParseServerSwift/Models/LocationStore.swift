@@ -11,8 +11,8 @@ import SwiftUI
 import ParseSwift
 import MapKit
 import Countries
-import os.log
-import Vapor
+//import os.log
+//import Vapor
 
 class LocationStore: ObservableObject {
 

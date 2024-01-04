@@ -8,7 +8,6 @@
 import Foundation
 import ParseSwift
 import Countries
-//import os.log
 import CoreLocation
 
 typealias ParentDetails = LocationDetails

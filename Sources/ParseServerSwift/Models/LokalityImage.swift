@@ -1,5 +1,5 @@
 //
-//  Image.swift
+//  LokalityImage.swift
 //  Lokality
 //
 //  Created by Jayson Ng on 7/29/21.
@@ -7,7 +7,6 @@
 
 import Foundation
 import ParseSwift
-import os.log
 
 struct LokalityImage: ParseObject, Identifiable {
 

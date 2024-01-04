@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import os.log
 
 extension Encodable {
     var dictionary: [String: Any]? {

@@ -7,7 +7,6 @@
 
 import Foundation
 import ParseSwift
-import os.log
 
 struct Tag: ParseObject, Identifiable, Codable {
 

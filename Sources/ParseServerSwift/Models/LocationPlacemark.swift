@@ -8,7 +8,6 @@
 import Foundation
 import ParseSwift
 import CoreLocation
-import os.log
 
 struct LocationPlacemark: ParseObject, Identifiable, Codable {
 

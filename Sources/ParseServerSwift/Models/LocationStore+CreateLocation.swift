@@ -8,7 +8,7 @@
 import Foundation
 import ParseSwift
 import CoreLocation
-import os.log
+// import os.log
 
 extension LocationStore {
 

@@ -11,7 +11,7 @@ import SwiftUI
 import ParseSwift
 import MapKit
 import Countries
-import os.log
+//import os.log
 import Vapor
 
 extension LocationStore {

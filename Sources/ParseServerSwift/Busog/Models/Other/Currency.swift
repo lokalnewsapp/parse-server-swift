@@ -7,7 +7,6 @@
 
 import Foundation
 import ParseSwift
-//import os.log
 
 struct Currency: ParseObject, Identifiable {
 

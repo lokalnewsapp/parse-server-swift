@@ -9,7 +9,6 @@
 
 import Foundation
 import ParseSwift
-import os.log
 
 typealias LOKError = LokalityError
 
