@@ -10,3 +10,4 @@ db.sqlite
 
 .env
 routes.swift
+.env
