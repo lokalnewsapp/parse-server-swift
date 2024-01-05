@@ -279,7 +279,7 @@ extension LokalityCollection {
                 .includeAll()
                 .find(options: [.usePrimaryKey])
             
-            print("Number of found Lokalities: \(foundLokalities.count)")
+            print("Search: Number of found Lokalities: \(foundLokalities.count)")
             return ParseHookResponse(success: foundLokalities)
             
         } catch {

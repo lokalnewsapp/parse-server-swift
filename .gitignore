@@ -9,3 +9,5 @@ db.sqlite
 .env.*
 
 .env
+.routes.swift
+.env
