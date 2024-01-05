@@ -7,7 +7,7 @@
 
 import Foundation
 import ParseSwift
-import CoreLocation
+// import CoreLocation
 // import os.log
 
 struct LocationPlacemark: ParseObject, Identifiable, Codable {
@@ -180,28 +180,28 @@ extension LocationPlacemark {
     }
 
 }
-
-extension LocationPlacemark.Get {
-
-    init(placemark: CLPlacemark, distance: Double = 1.5) throws {
-
-        self.name           = ""
-        self.center         = try ParseGeoPoint(latitude: 0, longitude: 0)
-        self.distance       = distance
-
-        if let latitude     = placemark.location?.coordinate.latitude,
-           let longitude    = placemark.location?.coordinate.longitude {
-
-            do {
-                let geopoint  = try ParseGeoPoint(latitude: latitude, longitude: longitude)
-                name        = placemark.name ?? ""
-                center      = geopoint
-            } catch let error {
-                throw error
-            }
-        }
-    }
-}
+//
+//extension LocationPlacemark.Get {
+//
+//    init(placemark: CLPlacemark, distance: Double = 1.5) throws {
+//
+//        self.name           = ""
+//        self.center         = try ParseGeoPoint(latitude: 0, longitude: 0)
+//        self.distance       = distance
+//
+//        if let latitude     = placemark.location?.coordinate.latitude,
+//           let longitude    = placemark.location?.coordinate.longitude {
+//
+//            do {
+//                let geopoint  = try ParseGeoPoint(latitude: latitude, longitude: longitude)
+//                name        = placemark.name ?? ""
+//                center      = geopoint
+//            } catch let error {
+//                throw error
+//            }
+//        }
+//    }
+//}
 
 //extension LocationPlacemark.Create {
 //
