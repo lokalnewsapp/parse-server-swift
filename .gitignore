@@ -9,3 +9,4 @@ db.sqlite
 .env.*
 .env
 routes.swift
+Sources/ParseServerSwift/routes.swift
