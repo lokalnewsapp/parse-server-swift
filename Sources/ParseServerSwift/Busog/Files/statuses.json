@@ -1,128 +1,128 @@
 [
     {
-        "objectId": "g5ru4YiAPV",
-        "name": "Banned",
-        "description": "Object is banned from Lokality",
-        "level": 50,
-        "type": "banned",
-        "note": "User or Any other object"
+        "description" : "Object is banned from Lokality",
+        "level" : 50,
+        "name" : "Banned",
+        "note" : "User or Any other object",
+        "objectId" : "g5ru4YiAPV",
+        "type" : "banned"
     },
     {
-        "objectId": "8J9Yy6KYW1",
-        "description": "While an object is being reviewed by admins.",
-        "name": "Under Review",
-        "level": 11,
-        "type": "underReview",
-        "note": "",
-        "ACL": {
-            "*": {
-                "read": true
+        "ACL" : {
+            "*" : {
+                "read" : true
             }
-        }
+        },
+        "description" : "While an object is being reviewed by admins.",
+        "level" : 11,
+        "name" : "Under Review",
+        "note" : "",
+        "objectId" : "8J9Yy6KYW1",
+        "type" : "underReview"
     },
     {
-        "objectId": "DkHYEUqpNy",
-        "name": "Flagged",
-        "description": "This means someone reported the Post/User but have yet to be checked by admin. ",
-        "level": 10,
-        "type": "flagged",
-        "ACL": {
-            "*": {
-                "read": true
+        "ACL" : {
+            "*" : {
+                "read" : true
             }
-        }
+        },
+        "description" : "This means someone reported the Post\/User but have yet to be checked by admin. ",
+        "level" : 10,
+        "name" : "Flagged",
+        "objectId" : "DkHYEUqpNy",
+        "type" : "flagged"
     },
     {
-        "objectId": "m0c8VeQsOe",
-        "name": "For Deletion",
-        "description": "This item will be deleted",
-        "level": 999,
-        "type": "forDeletion"
+        "description" : "This item will be deleted",
+        "level" : 999,
+        "name" : "For Deletion",
+        "objectId" : "m0c8VeQsOe",
+        "type" : "forDeletion"
     },
     {
-        "objectId": "okoGPjEtHk",
-        "name": "Closed",
-        "level": 101,
-        "description": "Closed. i.e. For Reports",
-        "type": "closed"
+        "description" : "Closed. i.e. For Reports",
+        "level" : 101,
+        "name" : "Closed",
+        "objectId" : "okoGPjEtHk",
+        "type" : "closed"
     },
     {
-        "objectId": "OP4SORpYya",
-        "type": "unknown",
-        "name": "Unknown",
-        "level": 0,
-        "description": "We don’t know the status off hand. This object needs to be checked.",
-        "ACL": {
-            "*": {
-                "read": true
+        "ACL" : {
+            "*" : {
+                "read" : true
             }
-        }
+        },
+        "description" : "We don’t know the status off hand. This object needs to be checked.",
+        "level" : 0,
+        "name" : "Unknown",
+        "objectId" : "OP4SORpYya",
+        "type" : "unknown"
     },
     {
-        "objectId": "SNgvAxmGYc",
-        "name": "Permanently Closed",
-        "description": "Location or Lokality has shut down.",
-        "level": 102,
-        "type": "permanentlyClosed",
-        "note": ""
+        "description" : "Location or Lokality has shut down.",
+        "level" : 102,
+        "name" : "Permanently Closed",
+        "note" : "",
+        "objectId" : "SNgvAxmGYc",
+        "type" : "permanentlyClosed"
     },
     {
-        "objectId": "8lOLcHlRsh",
-        "name": "Open",
-        "description": "Establishment is open",
-        "level": 100,
-        "type": "open",
-        "note": "Busog Statuses begin at 100"
+        "description" : "Establishment is open",
+        "level" : 100,
+        "name" : "Open",
+        "note" : "Busog Statuses begin at 100",
+        "objectId" : "8lOLcHlRsh",
+        "type" : "open"
     },
     {
-        "objectId": "qBFIGj7o27",
-        "name": "Moved",
-        "description": "Establishment Moved to another location",
-        "level": 105,
-        "type": "moved"
+        "description" : "Establishment Moved to another location",
+        "level" : 105,
+        "name" : "Moved",
+        "objectId" : "qBFIGj7o27",
+        "type" : "moved"
     },
     {
-        "objectId": "fok7uhGt7F",
-        "type": "underRenovation",
-        "name": "Under Renovation",
-        "description": "Under Renovation",
-        "level": 104
+        "description" : "Under Renovation",
+        "level" : 104,
+        "name" : "Under Renovation",
+        "objectId" : "fok7uhGt7F",
+        "type" : "underRenovation"
     },
     {
-        "objectId": "XBjSdFwBKF",
-        "name": "Temporarily Closed",
-        "type": "temporarilyClosed",
-        "description": "Temporarily Closed",
-        "level": 103
+        "description" : "Temporarily Closed",
+        "level" : 103,
+        "name" : "Temporarily Closed",
+        "objectId" : "XBjSdFwBKF",
+        "type" : "temporarilyClosed"
     },
     {
-        "objectId": "y2QA1VKTEF",
-        "description": "Review process has been done and no way to bring this back.",
-        "name": "Permanently Banned",
-        "type": "permanentlyBanned",
-        "level": 51
+        "description" : "Review process has been done and no way to bring this back.",
+        "level" : 51,
+        "name" : "Permanently Banned",
+        "objectId" : "y2QA1VKTEF",
+        "type" : "permanentlyBanned"
     },
     {
-        "objectId": "urdvHoBdt9",
-        "type": "locked",
-        "name": "Locked",
-        "description": "There shouldn't be anymore changes to this object",
-        "level": 5,
-        "note": "For Menus or Lokality"
+        "description" : "There shouldn't be anymore changes to this object",
+        "level" : 5,
+        "name" : "Locked",
+        "note" : "For Menus or Lokality",
+        "objectId" : "urdvHoBdt9",
+        "type" : "locked"
     },
     {
-        "objectId": "jNOusSMkVK",
-        "name": "Active",
-        "type": "active",
-        "description": "Is Active",
-        "level": 1,
-        "note": ""
+        "description" : "Is Active",
+        "level" : 1,
+        "name" : "Active",
+        "note" : "",
+        "objectId" : "jNOusSMkVK",
+        "type" : "active"
     },
     {
-        "objectId": "mCvRC9i62A",
-        "type": "inactive",
-        "name": "Inactive",
-        "description": "Inactive",
-        "level": 2
+        "description" : "Inactive",
+        "level" : 2,
+        "name" : "Inactive",
+        "objectId" : "mCvRC9i62A",
+        "type" : "inactive"
     }
 ]
