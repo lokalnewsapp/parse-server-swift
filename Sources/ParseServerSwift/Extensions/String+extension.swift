@@ -41,3 +41,15 @@ extension String {
     }
 
 }
+
+//: https://stackoverflow.com/a/60641131/1455606
+extension Optional {
+    var logable: Any {
+        switch self {
+        case .none:
+            return "<nil>|⭕️"
+        case let .some(value):
+            return value
+        }
+    }
+}

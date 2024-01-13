@@ -15,11 +15,11 @@ struct LokalityCollection: RouteCollection {
         
         let lokalityGroup = routes.grouped("lokality")
         
-        //: Testers
+        //:: Testers
         lokalityGroup.post(use: postWelcome)
         lokalityGroup.get(use: getWelcome)
 
-        //:: Get Methods
+        //:: GetLokality Methods
         lokalityGroup.post("get", "tag", name:"getLokalityByTag", use: getLokalityByTag)
         lokalityGroup.post("get", "id", name:"getLokalityByObjectId", use: getLokalityByObjectId)
         lokalityGroup.post("get", "name", name:"getLokalityByName", use: getLokalityByName)
@@ -379,9 +379,9 @@ extension LokalityCollection {
         
         do {
             let lokality = try await Lokality().getById(objectId)
-            print("Delete Lokality with objectId \(lokality.objectId)")
+            print("Delete Lokality with objectId \(lokality.objectId.logable)")
             try await lokality.delete(options: [.usePrimaryKey])
-            print("Delete Lokality with objectId \(lokality.objectId)")
+            print("Delete Lokality with objectId \(lokality.objectId.logable)")
             return ParseHookResponse(success: true)
 
         } catch {

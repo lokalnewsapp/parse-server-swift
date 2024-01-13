@@ -71,6 +71,7 @@ extension LokalityImage {
 
         } catch let error as ParseError {
             //Logger.profilePhoto.error("Something went wrong while fetching Lokality Image File \(error.localizedDescription)")
+            print(error)
             throw LOKError(.fileNotFound)
         }
     }
