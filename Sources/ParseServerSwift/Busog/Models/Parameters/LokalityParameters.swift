@@ -7,7 +7,6 @@
 
 import ParseSwift
 import Vapor
-// import CoreLocation
 
 /**
  Parameters for the Lokality Parse Hook Function.

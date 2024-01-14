@@ -53,3 +53,9 @@ extension Optional {
         }
     }
 }
+
+extension Data {
+    var prettyString: NSString? {
+        return NSString(data: self, encoding: String.Encoding.utf8.rawValue) ?? nil
+    }
+}

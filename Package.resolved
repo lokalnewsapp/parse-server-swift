@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "countries",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/lokalnewsapp/Countries.git",
+      "state" : {
+        "revision" : "b240c113f6035426bf04332119cf98d825e1b0a6",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "multipart-kit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/multipart-kit.git",
