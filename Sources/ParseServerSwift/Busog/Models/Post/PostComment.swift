@@ -7,7 +7,7 @@
 
 import Foundation
 import ParseSwift
-import os.log
+//import os.log
 
 struct PostComment: ParseObject {
 

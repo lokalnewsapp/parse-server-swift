@@ -7,7 +7,7 @@
 import Foundation
 import ParseSwift
 //import Carter
-import os.log
+//import os.log
 
 typealias Article = PostNews
 struct PostNews: ParseObject, Identifiable {
