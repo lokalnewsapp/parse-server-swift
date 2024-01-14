@@ -13,30 +13,37 @@ let package = Package(
         .watchOS(.v6)
     ],
     products: [
-            .library(name: "ParseServerSwift", targets: ["ParseServerSwift"])
+            .library(
+                name: "ParseServerSwift",
+                targets: ["ParseServerSwift"]
+            )
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", .upToNextMajor(from: "4.84.6")),
-        .package(url: "https://github.com/lokalnewsapp/Countries.git", .upToNextMajor(from: "1.0.0")),
-        .package(url: "https://github.com/netreconlab/Parse-Swift.git",
-                 .upToNextMajor(from: "5.8.2"))
+        .package(
+            url: "https://github.com/vapor/vapor.git",
+                .upToNextMajor(from: "4.91.1")
+        ),
+        .package(
+            url: "https://github.com/netreconlab/Parse-Swift.git",
+                 .upToNextMajor(from: "5.8.2")
+        )
     ],
     targets: [
         .target(
             name: "ParseServerSwift",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "Countries", package: "Countries"),
                 .product(name: "ParseSwift", package: "Parse-Swift")
             ]),
-        .executableTarget(name: "App",
-                          dependencies: [.target(name: "ParseServerSwift")],
-                          swiftSettings: [
-                              // Enable better optimizations when building in Release configuration. Despite the use of
-                              // the `.unsafeFlags` construct required by SwiftPM, this flag is recommended for Release
-                              // builds. See <https://github.com/swift-server/guides/blob/main/docs/building.md#building-for-production> for details.
-                              .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
-                          ]),
+        .executableTarget(
+            name: "App",
+            dependencies: [.target(name: "ParseServerSwift")],
+            swiftSettings: [
+                // Enable better optimizations when building in Release configuration. Despite the use of
+                // the `.unsafeFlags` construct required by SwiftPM, this flag is recommended for Release
+                // builds. See <https://github.com/swift-server/guides/blob/main/docs/building.md#building-for-production> for details.
+                .unsafeFlags(["-cross-module-optimization"], .when(configuration: .release))
+            ]),
         .testTarget(name: "ParseServerSwiftTests", dependencies: [
             .target(name: "ParseServerSwift"),
             .product(name: "XCTVapor", package: "vapor")
