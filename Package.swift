@@ -37,7 +37,8 @@ let package = Package(
             name: "ParseServerSwift",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "ParseSwift", package: "Parse-Swift")
+                .product(name: "ParseSwift", package: "Parse-Swift"),
+                .product(name: "Countries", package: "Countries")
             ]),
         .executableTarget(
             name: "App",
