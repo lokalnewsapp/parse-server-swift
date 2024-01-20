@@ -20,6 +20,8 @@ struct UserCollection: RouteCollection {
                 
         //: Functions
         usersGroup.post("isAdmin", name:"isAdmin", use: isAdmin)
+        usersGroup.post("isModerator", name:"isModerator", use: isModerator)
+        usersGroup.post("isVerifiedUser", name:"isVerifiedUser", use: isVerifiedUser)
 
     }
 }
@@ -34,6 +36,18 @@ extension UserCollection {
         return ParseHookResponse(success: true)
     }
     
+    func isModerator(req: Request) async throws -> ParseHookResponse<Bool> {
+        //: TODO
+        return ParseHookResponse(success: true)
+    }
+    
+    func isVerifiedUser(req: Request) async throws -> ParseHookResponse<Bool> {
+        //: TODO
+        return ParseHookResponse(success: true)
+    }
+    
+    
+        
 }
 
 // MARK: - -------------- Triggers --------------
